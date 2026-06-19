@@ -1,0 +1,51 @@
+name: Deploy Spring Boot
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '11'
+
+      - name: Build
+        run: mvn clean package -DskipTests
+
+      - name: Stop Service
+        run: |
+          nssm stop MySpringBoot
+        shell: powershell
+
+      - name: Copy Jar
+        run: |
+          Copy-Item `
+          target\*.jar `
+          C:\apps\myapp\app.jar `
+          -Force
+        shell: powershell
+
+      - name: Start Service
+        run: |
+          nssm start MySpringBoot
+        shell: powershell
+
+        
+      - name: Wait
+        run: Start-Sleep -Seconds 20
+        shell: powershell
+
+      - name: Health Check
+        run: |
+          Invoke-WebRequest `
+            http://localhost:8080/actuator/health
+        shell: powershell
