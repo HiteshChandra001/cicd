@@ -23,7 +23,7 @@ jobs:
 
       - name: Stop Service
         run: |
-          nssm stop MySpringBoot
+          Stop-Service -Name MySpringBoot -Force
         shell: powershell
 
       - name: Copy Jar
@@ -36,7 +36,7 @@ jobs:
 
       - name: Start Service
         run: |
-          nssm start MySpringBoot
+          Start-Service -Name MySpringBoot
         shell: powershell
 
         
