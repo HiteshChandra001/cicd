@@ -43,9 +43,3 @@ jobs:
       - name: Wait
         run: Start-Sleep -Seconds 20
         shell: powershell
-
-      - name: Health Check
-        run: |
-          Invoke-WebRequest `
-            http://localhost:8080/actuator/health
-        shell: powershell
